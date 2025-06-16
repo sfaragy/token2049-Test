@@ -11,6 +11,7 @@ services:
       - 9000:9000
     depends_on:
       - db
+      - redis
     networks:
       - token2049
 
@@ -26,6 +27,22 @@ services:
     networks:
       - token2049
 
+  queue-worker:
+    image: token2049-app
+    build:
+      context: .
+    volumes:
+      - ./src/:/var/www
+    depends_on:
+      - db
+      - app
+      - redis
+    working_dir: /var/www
+    command: php artisan queue:work --tries=3 --sleep=3 --timeout=90
+    restart: always
+    networks:
+      - token2049
+
   db:
     image: mysql:8
     environment:
@@ -37,6 +54,13 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql_vol:/var/lib/mysql
+    networks:
+      - token2049
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
     networks:
       - token2049
 
