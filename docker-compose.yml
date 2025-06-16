@@ -38,7 +38,7 @@ services:
       - app
       - redis
     working_dir: /var/www
-    command: php artisan queue:work --tries=3 --sleep=3 --timeout=90
+    command: php artisan queue:work database --tries=3 --sleep=3
     restart: always
     networks:
       - token2049
