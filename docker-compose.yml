@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    image: token2049-app
+    build:
+      context: .
+    volumes:
+      - ./src/:/var/www
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+    networks:
+      - token2049
+
+  webserver:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./src/:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - token2049
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: token2049_db
+    ports:
+      - "3307:3306"
+    networks:
+      - token2049
+
+networks:
+  token2049:
+    driver: bridge
