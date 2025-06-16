@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json(['message' => 'Welcome to Token2049 API. Ready to accept requests on /api']);
 });
