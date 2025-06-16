@@ -31,8 +31,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: token2049_db
+      MYSQL_USER: db_access
+      MYSQL_PASSWORD: secret
     ports:
-      - "3307:3306"
+      - "3306:3306"
+    volumes:
+      - ./mysql_vol:/var/lib/mysql
     networks:
       - token2049
 
