@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Enums\TransactionStatus;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessWebhookJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\CheckoutService;
@@ -59,21 +60,37 @@ class CheckoutController extends Controller
                 'transaction_id' => 'required|uuid',
                 'status' => ['required', new Enum(TransactionStatus::class)],
             ]);
+
+            if($this->statusAlreadyUpdated($data['transaction_id'], $data['status'])) {
+                return response()->json(['success' => true, 'skipped' => true, 'message' => 'Skipped for now! Transaction already updated!']);
+            }
+
+            ProcessWebhookJob::dispatch($data);
+
+            return response()->json(['success' => true, 'skipped' => false, 'message' => 'Transaction updated!']);
         } catch (ValidationException $e) {
+            Log::error('Webhook validation failed', [
+                'errors' => $e->errors(),
+                'payload' => $request->all(),
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid input data',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            Log::error('Unexpected error in webhook', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'payload' => $request->all(),
+            ]);
+            return response()->json(['error' => 'Internal server error'], 500);
         }
+    }
 
-        $updated = $this->checkoutService->updateStatus($data['transaction_id'], $data['status']);
-
-        if (! $updated) {
-            return response()->json(['error' => 'Invalid transaction ID or Status Text.'], 404);
-        }
-
-        return response()->json(['success' => true]);
+    private function statusAlreadyUpdated(string $transactionId, string $incomingStatus): bool
+    {
+        return $this->checkoutService->getTransaction($transactionId, $incomingStatus);
     }
 
 }

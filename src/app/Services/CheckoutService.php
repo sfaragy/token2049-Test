@@ -6,6 +6,7 @@ use App\Contracts\PaymentProviderInterface;
 use App\DTOs\CheckoutRequestData;
 use App\Enums\TransactionStatus;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CheckoutService
@@ -40,7 +41,13 @@ class CheckoutService
 
         $transaction->status = TransactionStatus::from($status);
         $transaction->save();
-
+        Log::info('Transaction Updated Successfully!', ['transaction_id' => $transactionId]);
         return $transaction;
+    }
+
+    public function getTransaction(string $transactionId, string $incomingStatus): bool
+    {
+        $existingStatus = Transaction::where('transaction_id', $transactionId)->value('status');
+        return $existingStatus === $incomingStatus;
     }
 }
