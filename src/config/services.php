@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'coinbase' => [
+        'webhook_secret' => env('COINBASE_WEBHOOK_SECRET'),
+    ]
+
 ];
