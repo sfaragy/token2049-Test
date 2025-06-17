@@ -12,11 +12,12 @@ class Transaction extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $primaryKey = 'transaction_id';
     protected $fillable = [
+        'transaction_id',
         'email',
         'amount',
         'currency',
-        'transaction_id',
         'status',
     ];
 
