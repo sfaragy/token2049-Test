@@ -51,7 +51,7 @@ class WebhookTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/webhook', $payload);
-        Log::info('asdf', [$response]);
+        //        Log::info('asdf', [$response]);
         $response->assertOk()->assertJson(['success' => true]);
 
         $this->assertDatabaseHas('transactions', [
