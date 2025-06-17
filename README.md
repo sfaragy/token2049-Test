@@ -36,6 +36,10 @@
 -----------------------------
 ### Prerequisites
 Ensure to have the following installed on the system where to run the project:
+ - Copy the Repo: 
+   - Make project directory  i.e. ```mkdir Token2049``` 
+   - ```cd Token2049```
+   - ```git clone https://github.com/sfaragy/token2049-Test```
  - Docker: For containerizing the application.
  - Docker Compose: For orchestrating the multi-container environment.
  - Make: A build automation tool (common on Linux/macOS; for Windows, consider WSL or Chocolatey).
