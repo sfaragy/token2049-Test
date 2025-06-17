@@ -1,4 +1,4 @@
-.PHONY: build project_init start stop restart app-login db-login clear-log add-hosts-entry queue-start queue-monitor
+.PHONY: build project_init start stop restart app-login db-login clear-log add-hosts-entry queue-start queue-monitor create-test-db
 
 build: stop add-hosts-entry
 	docker-compose -f docker-compose.yml build
@@ -42,3 +42,7 @@ queue-start:
 
 queue-monitor:
 	docker exec -it token2049_app_1 /bin/bash -c "php artisan queue:monitor --restart --clear-failed --stats"
+
+create-test-db:
+	docker exec -it token2049_db_1 sh -c 'mysql -uroot --password=root -e "CREATE DATABASE token2049_db_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"'
+
