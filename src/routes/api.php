@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout']);
-    Route::post('/webhook', [WebhookController::class, 'handleCheckout']);
+    Route::post('/webhook', [WebhookController::class, 'handleCoinbase']);
     Route::get('/health', [HealthController::class, 'status']);
 });
 
