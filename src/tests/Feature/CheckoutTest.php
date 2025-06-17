@@ -6,6 +6,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
+
+/*
+* A Feature Test
+*/
 class CheckoutTest extends TestCase
 {
     use RefreshDatabase;
