@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\CheckoutController;
 use App\Http\Controllers\API\V1\HealthController;
+use App\Http\Controllers\API\V1\WebhookController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout']);
-    Route::post('/webhook', [CheckoutController::class, 'webhook']);
+    Route::post('/webhook', [WebhookController::class, 'handleCheckout']);
     Route::get('/health', [HealthController::class, 'status']);
 });
 
