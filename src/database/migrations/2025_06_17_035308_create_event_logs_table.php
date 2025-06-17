@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('event_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->decimal('amount', 10, 2);
-            $table->string('currency')->default('USD');
-            $table->uuid('transaction_id')->unique();
-            $table->string('status')->default('pending');
+            $table->uuid('webhook_event_id');
+            $table->string('status');
+            $table->text('message')->nullable();
             $table->timestamps();
+
+            $table->foreign('webhook_event_id')->references('id')->on('webhook_events')->onDelete('cascade');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('event_logs');
     }
 };
