@@ -10,6 +10,8 @@
    - Generate Session
    - Simulate Webhook
    - Monitor Queue
+ - Deploy:
+   - To DigitalOcean
  - Future Improvements
  - Troubleshooting
 
@@ -25,7 +27,7 @@
 8. Documentation on how to run the project including future improvement possibilities. -- Done
 9. Finally make the workflow to deploy in DigitalOcean. -- N/A
 ----------------------------
-## Features
+## Features:
 1. **Crypto Checkout Simulation**: Simulates the process of creating payment sessions and tracking transactions, mocking a Coinbase Commerce integration. 
 2. **Webhook-Driven Updates**: A webhook processing system to asynchronously update transaction statuses. 
 3. **Clear Data Modeling**: Employs distinct database schemas and Enums for transaction and payment statuses, ensuring accurate tracking. 
@@ -34,7 +36,7 @@
 6. **Retry Logic**: Webhook processing jobs include built-in retry mechanisms for transient failures. 
 7. **Dynamic Webhook Simulation**: A powerful Artisan command to generate and send various mock Coinbase webhook payloads for thorough testing.
 -----------------------------
-### Prerequisites
+### Prerequisites:
 Ensure to have the following installed on the system where to run the project:
  - Copy the Repo: 
    - Make project directory  i.e. ```mkdir Token2049``` 
@@ -51,7 +53,7 @@ Ensure to have the following installed on the system where to run the project:
   sudo apt-get -y install make
   ```
 -------------------------------------------------
-## Installation
+## Installation:
 ### Step 1: Docker Container Management
 Navigate to the project's root directory in the terminal.
 
@@ -98,7 +100,7 @@ Navigate to the project's root directory in the terminal.
   - To Stop: ```docker-compose -f docker-compose.yml down```
 
 ------------------------------------------
-## API Endpoints
+## API Endpoints:
 Once the project is initiated and running, API endpoints will be accessible via 
 http://token2049.local.com/ or http://localhost/ (depending on Nginx/host configuration and host alias config).
 1. **Create Checkout**: Simulates creating a payment checkout and returns a fake hosted payment URL.
@@ -239,8 +241,8 @@ instead of ```9d210758-2edf-4f8a-b66e-79c9376c5e4b```
        "failed": 0
      }
   }
-  
-## A Test steps for end-to-end process
+ ---------------------------- 
+## A Test steps for end-to-end process:
 
  - **Step 1:** Create a checkout session: POST request to ```/api/v1/checkout ``` maybe with PostMan
     ```json
@@ -256,7 +258,16 @@ instead of ```9d210758-2edf-4f8a-b66e-79c9376c5e4b```
  - **Step 4:** To monitor the queue is processing or not please follow the queue worker activity with the command make / inside docker:
     ```make queue-monitor``` or ```php artisan queue:monitor --restart --clear-failed --stats```
 ------------------------------------------------------
-## Future Improvements
+## Deploy:
+
+### 1. Deploy to DigitalOcean:
+- To Deploy in digital ocean please run the command from project root:
+    ``` 
+    sh deploy.sh   
+    ```
+  - **Note:** For now I just kept the tests enabled. 
+  But if I get access to DigitalOcean then I can enable rest of the steps
+## Future Improvements:
 If given more time, the following enhancements would be prioritized to further stabilize, modernize, and extend the service:
  - **Robust Signature Verification:** Fully implement and test HMAC signature verification for all incoming webhooks using provider-specific secrets.
  - **Comprehensive Error Handling & Monitoring:** Implement centralized error tracking (e.g., Sentry which I normally use) and detailed metrics/dashboards for transaction states, webhook processing times, and job failures.
@@ -269,7 +280,7 @@ If given more time, the following enhancements would be prioritized to further s
  - **User Interface:** A simple dashboard to view transactions, their statuses, and webhook logs.
  - **Deployment Automation:** Full CI/CD pipeline for automated testing and deployment to DigitalOcean (or GCP, AWS etc.).
 ---------------------------------------
-## Troubleshooting
+## Troubleshooting:
 **Common Causes & Solutions:**
 
 1. Nginx Not Running or Not Listening Correctly Internally:
