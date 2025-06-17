@@ -23,9 +23,9 @@
 4. prepare health endpoint for app status. -- Done
 5. Process asynchronous webhook requests. -- Done
 6. Prepare console commands for Simulating the webhook requests and monitor queue -- DoONE
-7. If I have time I will try to prepare PHPUnit test coverage with Red-Green-Refactor in mind. -- N/A
+7. If I have time I will try to prepare PHPUnit test coverage with Red-Green-Refactor in mind. -- Done
 8. Documentation on how to run the project including future improvement possibilities. -- Done
-9. Finally make the workflow to deploy in DigitalOcean. -- N/A
+9. Finally make the workflow to run tests and deploy in DigitalOcean. -- Done
 ----------------------------
 ## Features:
 1. **Crypto Checkout Simulation**: Simulates the process of creating payment sessions and tracking transactions, mocking a Coinbase Commerce integration. 
@@ -290,6 +290,10 @@ If given more time, the following enhancements would be prioritized to further s
    - **Internal Connectivity Test:** From within the container, try curl http://localhost. It should return application's HTML/JSON response. If it fails, Nginx isn't serving correctly internally. 
 2. **APP_URL Mismatch (Less likely with localhost in single-container Nginx):**
  - APP_URL in .env to ensure it's http://localhost as expected for our Nginx setup. To restart Docker containers (``make restart``) after any changes in .env file.
+3. Container name could be different based on the project root directory. 
+   - For example my project root directory is in Token2049. So, My docker container name starts with token2049_.
+   - If anyone run in a different directory then the container name need to change in Makefile.
+   - i.e. ```docker compose exec token2049_app_1 /bin/bash``` here token2049_ need change as per the output of command ```docker ps```
 
 ----------------------------
 Thank you for following the documentation. Hopefully it will help to run the project. Please feel free to contact for any concern or issues. 
