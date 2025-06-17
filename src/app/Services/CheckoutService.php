@@ -4,50 +4,43 @@ namespace App\Services;
 
 use App\Contracts\PaymentProviderInterface;
 use App\DTOs\CheckoutRequestData;
+use App\DTOs\CheckoutResponseData;
 use App\Enums\TransactionStatus;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Log;
+use App\Services\Providers\PaymentProviderManager;
 use Illuminate\Support\Str;
 
 class CheckoutService
 {
     protected PaymentProviderInterface $provider;
+    protected PaymentProviderManager $providerManager;
 
-    public function __construct(PaymentProviderInterface $provider)
+    public function __construct(PaymentProviderManager $providerManager)
     {
-        $this->provider = $provider;
+        $this->providerManager = $providerManager;
     }
 
-    public function createCheckout(CheckoutRequestData $data): array
+    /**
+     *  THis method will choose coinbase as a default provider, but we will be able to pass any provider from controller to instantiate.
+     *
+     * @param CheckoutRequestData $data
+     * @param string $providerName
+     * @return CheckoutResponseData
+     */
+    public function createCheckout(CheckoutRequestData $data, string $providerName = 'coinbase'): CheckoutResponseData
     {
+        $provider = $this->providerManager->getProvider($providerName);
+
         $transaction = Transaction::create([
             'email' => $data->email,
             'amount' => $data->amount,
+            'currency' => 'USD',
             'transaction_id' => Str::uuid(),
+            'status' => TransactionStatus::PENDING,
         ]);
 
-        $checkoutUrl = $this->provider->createPaymentSession($transaction);
+        $checkoutUrl = $provider->createPaymentSession($transaction);
 
-        return ['transaction' => $transaction, 'checkout_url' => $checkoutUrl];
-    }
-
-    public function updateStatus(string $transactionId, string $status): ?Transaction
-    {
-        $transaction = Transaction::where('transaction_id', $transactionId)->first();
-
-        if (!$transaction) {
-            return null;
-        }
-
-        $transaction->status = TransactionStatus::from($status);
-        $transaction->save();
-        Log::info('Transaction Updated Successfully!', ['transaction_id' => $transactionId]);
-        return $transaction;
-    }
-
-    public function getTransaction(string $transactionId, string $incomingStatus): bool
-    {
-        $existingStatus = Transaction::where('transaction_id', $transactionId)->value('status');
-        return $existingStatus === $incomingStatus;
+        return new CheckoutResponseData($checkoutUrl, $transaction->transaction_id);
     }
 }
