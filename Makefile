@@ -1,4 +1,4 @@
-.PHONY: build project_init start stop restart app-login db-login logs clear-log add-hosts-entry
+.PHONY: build project_init start stop restart app-login db-login logs clear-log add-hosts-entry check-queue
 
 build: stop add-hosts-entry
 	docker-compose -f docker-compose.yml build
@@ -39,3 +39,6 @@ add-hosts-entry:
 	else \
 		echo "Entry for token2049.local.com already exists in /etc/hosts"; \
 	fi
+
+check-queue:
+	docker exec -it token2049_app_1 /bin/bash -c "php artisan queue:work"
