@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\MonitorQueue;
 use App\Console\Commands\SimulateWebhook;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -29,5 +30,6 @@ class Kernel extends ConsoleKernel
     /* Custom Artisan Commands*/
     protected $commands = [
         SimulateWebhook::class,
+        MonitorQueue::class,
     ];
 }
